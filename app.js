@@ -6,6 +6,8 @@ var logger = require('morgan');
 const mongoose = require('mongoose');
 const config = require('./config');
 
+const Users = require('./models/users');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const url = config.mongoUrl;
