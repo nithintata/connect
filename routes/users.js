@@ -5,13 +5,14 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const Users = require('../models/users');
-const config = require('../config.js');
+const config = require('../config');
+const authenticate = require('../authenticate');
 
 var router = express.Router();
 router.use(bodyParser.json());
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/test', authenticate.verifyUser, function(req, res, next) {
+  res.send('responded after authentication');
 });
 
 /*Registering new Users*/

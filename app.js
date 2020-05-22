@@ -7,9 +7,12 @@ const mongoose = require('mongoose');
 const config = require('./config');
 
 const Users = require('./models/users');
+const Posts = require('./models/posts');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var postsRouter = require('./routes/posts');
+
 const url = config.mongoUrl;
 const connect = mongoose.connect(url, {
   useNewUrlParser: true,
@@ -34,6 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/posts', postsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
