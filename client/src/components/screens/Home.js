@@ -9,7 +9,7 @@ const Home = () => {
           <img src = "https://images.unsplash.com/photo-1477346611705-65d1883cee1e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"/>
         </div>
         <div className = "card-content">
-        <i class = "material-icons" style = {{color:"red"}}>favorite</i>
+        <i className = "material-icons" style = {{color:"red"}}>favorite</i>
           <h5>title</h5>
           <p>Beautiful nature</p>
           <input type = "text" placeholder = "comment on this post" />
@@ -22,7 +22,7 @@ const Home = () => {
           <img src = "https://images.unsplash.com/photo-1477346611705-65d1883cee1e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"/>
         </div>
         <div className = "card-content">
-        <i class = "material-icons" style = {{color:"red"}}>favorite</i>
+        <i className = "material-icons" style = {{color:"red"}}>favorite</i>
           <h5>title</h5>
           <p>Beautiful nature</p>
           <input type = "text" placeholder = "comment on this post" />
@@ -35,7 +35,7 @@ const Home = () => {
           <img src = "https://images.unsplash.com/photo-1477346611705-65d1883cee1e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"/>
         </div>
         <div className = "card-content">
-        <i class = "material-icons" style = {{color:"red"}}>favorite</i>
+        <i className = "material-icons" style = {{color:"red"}}>favorite</i>
           <h5>title</h5>
           <p>Beautiful nature</p>
           <input type = "text" placeholder = "comment on this post" />
