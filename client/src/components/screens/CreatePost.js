@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Link, useHistory} from 'react-router-dom'
 import M from 'materialize-css'
 
@@ -7,44 +7,59 @@ const CreatePost = () => {
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")
   const [image, setImage] = useState("")
-  const [url, setUrl] = useState("")
+  const [url,setUrl] = useState("")
 
-  const postData = () => {
-    const data = new FormData()
-    data.append("file", image)
-    data.append("upload_preset", "connect")
-    data.append("cloud_name", "nithin")
-    fetch("https://api.cloudinary.com/v1_1/nithin/image/upload", {
-      method: "post",
-      body: data
-    })
-    .then(res => res.json())
-    .then(data => {setUrl(data.url)}).catch(err => {console.log(err)})
+    useEffect(()=>{
+       if(url){
+        fetch("/posts/createpost",{
+            method:"post",
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization":"Bearer "+localStorage.getItem("jwt")
+            },
+            body:JSON.stringify({
+                title,
+                body,
+                pic:url
+            })
+        }).then(res=>res.json())
+        .then(data=>{
 
-    fetch("posts/createpost", {
-      method: "post",
-      headers: {
-        "Content-Type" : "application/json"
-      },
-      body: JSON.stringify({
-        title,
-        body,
-        pic:url
-      })
-    }).then(res => res.json()).then(data => {
-      console.log(data)
-      if (data.error) {
-         M.toast({html: data.error, classes: "#c62828 red darken-3"})
-      }
-      else {
-        M.toast({html: "Posted Successfully", classes: "#43a047 green darken-1"})
-        history.push('/')
-      }
-    }).catch((err) => console.log(err))
+           if(data.error){
+              M.toast({html: data.error,classes:"#c62828 red darken-3"})
+           }
+           else{
+               M.toast({html:"Created post Successfully",classes:"#43a047 green darken-1"})
+               history.push('/')
+           }
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
+    },[url])
 
-  }
+    const postData = ()=>{
+         const data = new FormData()
+         data.append("file",image)
+         data.append("upload_preset","connect")
+         data.append("cloud_name","nithin")
+         fetch("https://api.cloudinary.com/v1_1/nithin/image/upload",{
+             method:"post",
+             body:data
+         })
+         .then(res=>res.json())
+         .then(data=>{
+            setUrl(data.url)
+         })
+         .catch(err=>{
+             console.log(err)
+         })
+
+
+     }
+
   return (
-    <div className = "card input-filed" style = {{
+    <div className = "card input-field" style = {{
       margin: "10px auto",
       maxWidth: "500px",
       padding: "20px",

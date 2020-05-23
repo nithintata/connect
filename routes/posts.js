@@ -20,7 +20,7 @@ router.get('/all', (req, res, next) => {
 
 router.post('/createpost', authenticate.verifyUser, (req, res, next) => {
   const{title, body, pic} = req.body;
-  if (!title || !pic) {
+  if (!title || !body || !pic) {
     res.statusCode = 422;
     res.setHeader('Content-Type', 'application/json');
     res.json({error: "Please fill all the fields"});
