@@ -19,14 +19,14 @@ router.get('/all', (req, res, next) => {
 });
 
 router.post('/createpost', authenticate.verifyUser, (req, res, next) => {
-  const{title, body} = req.body;
-  if (!title || !body) {
+  const{title, body, pic} = req.body;
+  if (!title || !pic) {
     res.statusCode = 422;
     res.setHeader('Content-Type', 'application/json');
     res.json({error: "Please fill all the fields"});
     return;
   }
-  Posts.create({title: title, body: body, postedBy: req.user})
+  Posts.create({title: title, body: body, photo: pic, postedBy: req.user})
   .then((post) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
