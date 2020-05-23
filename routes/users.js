@@ -42,7 +42,7 @@ router.post('/signup', (req, res, next) => {
         console.log("User Created Successfully");
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(user);
+        res.json({message: "Saved Successfully"});
       }, (err) => next(err));
 
     }, (err) => next(err));

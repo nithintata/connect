@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
 const config = require('./config');
+const PORT = process.env.PORT || 5000;
 
 const Users = require('./models/users');
 const Posts = require('./models/posts');
@@ -55,4 +56,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.listen(PORT, () => {
+  console.log("Server running on ", PORT);
+})
 module.exports = app;
