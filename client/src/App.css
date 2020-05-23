@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+a {
+  color: black !important;
+}
+
+.myfont {
+  font-family: 'Pacifico', cursive;
+}
+
+.mycard {
+  margin-top: 30px;
+}
+.auth-card {
+  padding: 20px;
+  text-align: center;
+  max-width: 400px;
+  margin: 15px auto;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.item {
+  width: 30%;
+  margin-bottom: 20px;
+}
+
+.home-card {
+  max-width: 500px;
+  height: max-content;
+  margin: 25px auto;
+}
