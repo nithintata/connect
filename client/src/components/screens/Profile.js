@@ -1,6 +1,18 @@
-import React from 'react'
+import React,{useEffect, useState, useContext} from 'react'
+import {UserContext} from '../../App'
 
 const Profile = () => {
+  const [pics, setPics] = useState([])
+  const {state, dispatch} = useContext(UserContext)
+  useEffect(() => {
+    fetch('/posts/myposts', {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("jwt")      }
+    }).then(res => res.json())
+    .then(result => {
+      setPics(result)
+    })
+  }, [])
   return (
     <div style = {{maxWidth: "650px", margin: "0px auto"}}>
       <div style = {{
@@ -16,9 +28,9 @@ const Profile = () => {
         </div>
 
         <div>
-        <h4>John wick</h4>
+        <h4>{state ? state.name : "Loading.."}</h4>
         <div style = {{display: "flex",justifyContent: "space-between", width: "108%"}}>
-          <h6>40 posts</h6>
+          <h6>{pics.length} posts</h6>
           <h6>30 followers</h6>
           <h6>20 following</h6>
         </div>
@@ -27,13 +39,13 @@ const Profile = () => {
       </div>
 
       <div className="gallery">
-      <img className="item" src = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTkYHfs9m5fwgnQgDRyKtB65bLFFsIlgeFwFvSvzFvGERwo1-s2&usqp=CAU" />
-      <img className="item" src = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTkYHfs9m5fwgnQgDRyKtB65bLFFsIlgeFwFvSvzFvGERwo1-s2&usqp=CAU" />
-      <img className="item" src = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTkYHfs9m5fwgnQgDRyKtB65bLFFsIlgeFwFvSvzFvGERwo1-s2&usqp=CAU" />
-      <img className="item" src = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTkYHfs9m5fwgnQgDRyKtB65bLFFsIlgeFwFvSvzFvGERwo1-s2&usqp=CAU" />
-      <img className="item" src = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTkYHfs9m5fwgnQgDRyKtB65bLFFsIlgeFwFvSvzFvGERwo1-s2&usqp=CAU" />
-      <img className="item" src = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTkYHfs9m5fwgnQgDRyKtB65bLFFsIlgeFwFvSvzFvGERwo1-s2&usqp=CAU" />
-      <img className="item" src = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTkYHfs9m5fwgnQgDRyKtB65bLFFsIlgeFwFvSvzFvGERwo1-s2&usqp=CAU" />
+      {
+        pics.map(item => {
+          return (
+            <img key = {item._id} className="item" alt = {item.title} src = {item.photo} />
+          )
+        })
+      }
       </div>
     </div>
   )
