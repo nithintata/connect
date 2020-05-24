@@ -10,7 +10,7 @@ const authenticate = require('../authenticate');
 var router = express.Router();
 router.use(bodyParser.json());
 
-router.get('/all', (req, res, next) => {
+router.get('/all', authenticate.verifyUser, (req, res, next) => {
   Posts.find({})
   .populate("postedBy", "_id name")
   .then((posts) => {
