@@ -68,4 +68,23 @@ router.put('/unlike', authenticate.verifyUser, (req, res, next) => {
   })
 })
 
+router.put('/comment', authenticate.verifyUser, (req, res, next) => {
+  const comment = {
+    text: req.body.text,
+    postedBy: req.user._id
+  }
+  Posts.findByIdAndUpdate(req.body.postId, {
+    $push:{comments:comment}
+  },{new: true})
+  .populate("comments.postedBy", "_id name")
+  .exec((err, result) => {
+     if (err) {
+       return res.status(422).json({error: err})
+     }
+     else {
+       res.json(result)
+     }
+  })
+})
+
 module.exports = router;
