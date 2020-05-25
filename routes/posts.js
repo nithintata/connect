@@ -114,5 +114,30 @@ router.delete('/deletepost/:postId', authenticate.verifyUser, (req, res, next) =
   })
 })
 
+router.delete('/:postId/comments/:commentId', authenticate.verifyUser, (req, res, next) => {
+  Posts.findById(req.params.postId)
+  .then(post => {
+    if (!post) {
+      res.statusCode = 422;
+      res.setHeader('Content-Type', 'application/json');
+      res.json({error: "Invalid Operation"});
+      return;
+    }
+
+    if (post.comments.id(req.params.commentId).postedBy._id.toString() === req.user._id.toString()) {
+      post.comments.id(req.params.commentId).remove()
+      post.save()
+      .then(post => {
+        Posts.findById(post._id)
+        .populate("postedBy", "_id name")
+        .populate("comments.postedBy", "_id name")
+        .then(post => {
+          res.json(post)
+        })
+      }, (err) => next(err))
+    }
+  }, err => next(err)).catch(err => next(err));
+})
+
 
 module.exports = router;
