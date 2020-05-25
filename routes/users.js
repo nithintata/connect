@@ -5,11 +5,37 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const Users = require('../models/users');
+const Posts = mongoose.model("Post")
 const config = require('../config');
 const authenticate = require('../authenticate');
 
 var router = express.Router();
 router.use(bodyParser.json());
+
+/*Profile of users*/
+router.get('/:userId',authenticate.verifyUser, (req, res, next) => {
+  Users.findById(req.params.userId)
+  .select("-password")
+  .then((user) => {
+    if (!user) {
+      res.statusCode = 404;
+      res.setHeader('Content-Type', 'application/json');
+      res.json({error: "User not found"});
+      return;
+    }
+    Posts.find({postedBy: req.params.userId})
+    .populate("postedBy", "_id, name")
+    .then((posts) => {
+      if (posts) {
+        res.json({user, posts})
+      }
+    })
+  }, (err) => next(err)).catch(err => next(err));
+})
+
+
+
+
 /* GET users listing. */
 router.get('/test', authenticate.verifyUser, function(req, res, next) {
   res.send('responded after authentication');
