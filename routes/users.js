@@ -114,4 +114,39 @@ router.post('/signin', (req, res, next) => {
   }, (err) => next(err)).catch((err) => next(err));
 });
 
+
+router.put('/follow', authenticate.verifyUser, (req, res, next) => {
+  Users.findByIdAndUpdate(req.body.followId, {
+    $push:{followers:req.user._id}
+  }, {new: true}, (err, result) => {
+    if (err) {
+      return res.status(422).json({error: err});
+    }
+
+    Users.findByIdAndUpdate(req.user._id, {
+      $push:{following: req.body.followId}
+    }, {new: true}).then(result => {
+      res.json(result);
+    }, err => next(err)).catch(err => next(err));
+  })
+
+})
+
+router.put('/unfollow', authenticate.verifyUser, (req, res, next) => {
+  Users.findByIdAndUpdate(req.body.followId, {
+    $pull:{followers:req.user._id}
+  }, {new: true}, (err, result) => {
+    if (err) {
+      return res.status(422).json({error: err});
+    }
+
+    Users.findByIdAndUpdate(req.user._id, {
+      $pull:{following: req.body.followId}
+    }, {new: true}).then(result => {
+      res.json(result);
+    }, err => next(err)).catch(err => next(err));
+  })
+
+})
+
 module.exports = router;
