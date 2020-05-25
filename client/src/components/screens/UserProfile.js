@@ -4,6 +4,7 @@ import {useParams} from 'react-router-dom'
 
 const Profile = () => {
   const [profile, setProfile] = useState(null)
+  const [showFollow, setShowFollow] = useState(true)
   const {state, dispatch} = useContext(UserContext)
   const{userId} = useParams()
   useEffect(() => {
@@ -15,6 +16,55 @@ const Profile = () => {
       setProfile(result)
     })
   }, [])
+
+  const follow = () => {
+    fetch('/users/follow', {
+      method: "put",
+      headers: {
+        "Content-Type" : "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        followId: userId
+      })
+    }).then(res => res.json()).then(data => {
+      dispatch({type: "UPDATE", payload:{following:data.following, followers: data.followers}})
+      localStorage.setItem("user", JSON.stringify(data))
+      setProfile((prevState) => {
+        return {
+          ...prevState,
+          user:{...prevState.user, followers: [...prevState.user.followers, data._id]}
+        }
+      })
+      setShowFollow(false)
+    })
+  }
+
+
+  const unfollow = () => {
+    fetch('/users/unfollow', {
+      method: "put",
+      headers: {
+        "Content-Type" : "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        unfollowId: userId
+      })
+    }).then(res => res.json()).then(data => {
+      dispatch({type: "UPDATE", payload:{following:data.following, followers: data.followers}})
+      localStorage.setItem("user", JSON.stringify(data))
+      setProfile((prevState) => {
+        const newFollowers = prevState.user.followers.filter(item => item != data._id)
+        return {
+          ...prevState,
+          user:{...prevState.user, followers: newFollowers}
+        }
+      })
+      setShowFollow(true)
+    })
+  }
+
   return (
     <>
     {profile ?
@@ -37,9 +87,15 @@ const Profile = () => {
           <h5>{profile.user.email}</h5>
           <div style = {{display: "flex",justifyContent: "space-between", width: "108%"}}>
             <h6>{profile.posts.length} posts</h6>
-            <h6>30 followers</h6>
-            <h6>20 following</h6>
+            <h6>{profile.user.followers.length} followers</h6>
+            <h6>{profile.user.following.length} following</h6>
           </div>
+          {
+            showFollow ?
+            <button style = {{margin: "10px"}} className = "btn waves-effect waves-light" onClick = {() => follow()}> Follow </button>
+            : <button style = {{margin: "10px"}} className = "btn waves-effect waves-light" onClick = {() => unfollow()}> unFollow </button>
+          }
+
           </div>
 
         </div>

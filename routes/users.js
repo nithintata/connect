@@ -125,7 +125,7 @@ router.put('/follow', authenticate.verifyUser, (req, res, next) => {
 
     Users.findByIdAndUpdate(req.user._id, {
       $push:{following: req.body.followId}
-    }, {new: true}).then(result => {
+    }, {new: true}).select("-password").then(result => {
       res.json(result);
     }, err => next(err)).catch(err => next(err));
   })
@@ -133,7 +133,7 @@ router.put('/follow', authenticate.verifyUser, (req, res, next) => {
 })
 
 router.put('/unfollow', authenticate.verifyUser, (req, res, next) => {
-  Users.findByIdAndUpdate(req.body.followId, {
+  Users.findByIdAndUpdate(req.body.unfollowId, {
     $pull:{followers:req.user._id}
   }, {new: true}, (err, result) => {
     if (err) {
@@ -141,8 +141,8 @@ router.put('/unfollow', authenticate.verifyUser, (req, res, next) => {
     }
 
     Users.findByIdAndUpdate(req.user._id, {
-      $pull:{following: req.body.followId}
-    }, {new: true}).then(result => {
+      $pull:{following: req.body.unfollowId}
+    }, {new: true}).select("-password").then(result => {
       res.json(result);
     }, err => next(err)).catch(err => next(err));
   })
