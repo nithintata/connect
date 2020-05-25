@@ -13,6 +13,7 @@ router.use(bodyParser.json());
 router.get('/all', authenticate.verifyUser, (req, res, next) => {
   Posts.find({})
   .populate("postedBy", "_id name")
+  .populate("comments.postedBy", "_id name")
   .then((posts) => {
     res.json(posts);
   }, (err) => next(err)).catch((err) => next(err));
@@ -37,6 +38,7 @@ router.post('/createpost', authenticate.verifyUser, (req, res, next) => {
 router.get('/myposts', authenticate.verifyUser, (req, res, next) => {
   Posts.find({postedBy: req.user._id})
   .populate("postedBy", "_id name")
+  .populate("comments.postedBy", "_id name")
   .then((posts ) => {
     res.json(posts);
   }, (err) => next(err)).catch((err) => next(err));
@@ -45,7 +47,10 @@ router.get('/myposts', authenticate.verifyUser, (req, res, next) => {
 router.put('/like', authenticate.verifyUser, (req, res, next) => {
   Posts.findByIdAndUpdate(req.body.postId, {
     $push:{likes:req.user._id}
-  },{new: true}).exec((err, result) => {
+  },{new: true})
+  .populate("postedBy", "_id name")
+  .populate("comments.postedBy", "_id name")
+  .exec((err, result) => {
      if (err) {
        return res.status(422).json({error: err})
      }
@@ -58,7 +63,10 @@ router.put('/like', authenticate.verifyUser, (req, res, next) => {
 router.put('/unlike', authenticate.verifyUser, (req, res, next) => {
   Posts.findByIdAndUpdate(req.body.postId, {
     $pull:{likes:req.user._id}
-  },{new: true}).exec((err, result) => {
+  },{new: true})
+  .populate("postedBy", "_id name")
+  .populate("comments.postedBy", "_id name")
+  .exec((err, result) => {
      if (err) {
        return res.status(422).json({error: err})
      }
@@ -76,6 +84,7 @@ router.put('/comment', authenticate.verifyUser, (req, res, next) => {
   Posts.findByIdAndUpdate(req.body.postId, {
     $push:{comments:comment}
   },{new: true})
+  .populate("postedBy", "_id name")
   .populate("comments.postedBy", "_id name")
   .exec((err, result) => {
      if (err) {

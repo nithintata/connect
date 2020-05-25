@@ -62,6 +62,30 @@ const Home = () => {
     }).catch(err => console.log(err))
   }
 
+  const postComment = (text, postId) => {
+    fetch('/posts/comment', {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        postId:postId,
+        text: text
+      })
+    }).then(res => res.json()).then(result => {
+      const newData = data.map(item => {
+        if (item._id == result._id) {
+          return result
+        }
+        else {
+          return item
+        }
+      })
+      setData(newData)
+    }).catch(err => console.log(err))
+  }
+
   return (
     <div className = "home">{
       data.map(item => {
@@ -80,7 +104,19 @@ const Home = () => {
               <h6>{item.likes.length} likes</h6>
               <h5>{item.title}</h5>
               <p>{item.body}</p>
-              <input type = "text" placeholder = "comment on this post" />
+              {
+                item.comments.map(comment => {
+                  return (
+                    <h6 key={comment._id}><span style = {{fontWeight: "500"}}>{comment.postedBy.name} : </span> {comment.text}</h6>
+                  )
+                })
+              }
+              <form onSubmit = {(e) => {
+                e.preventDefault()
+                postComment(e.target[0].value, item._id)
+              }}>
+                <input type = "text" placeholder = "comment on this post" />
+              </form>
             </div>
           </div>
         )
