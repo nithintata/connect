@@ -149,4 +149,14 @@ router.put('/unfollow', authenticate.verifyUser, (req, res, next) => {
 
 })
 
+router.put('/updatepic', authenticate.verifyUser, (req, res, next) => {
+  Users.findByIdAndUpdate(req.user._id, {$set: {pic:req.body.pic}},{new: true}, (err, result) => {
+    if (err) {
+      return res.status(422).json({error: "pic cannot be updated"});
+    }
+    res.json(result)
+  })
+})
+
+
 module.exports = router;
