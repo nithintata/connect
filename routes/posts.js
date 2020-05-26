@@ -19,6 +19,15 @@ router.get('/all', authenticate.verifyUser, (req, res, next) => {
   }, (err) => next(err)).catch((err) => next(err));
 });
 
+router.get('/myfeed', authenticate.verifyUser, (req, res, next) => {
+  Posts.find({postedBy:{$in:req.user.following}})
+  .populate("postedBy", "_id name")
+  .populate("comments.postedBy", "_id name")
+  .then((posts) => {
+    res.json(posts);
+  }, (err) => next(err)).catch((err) => next(err));
+});
+
 router.post('/createpost', authenticate.verifyUser, (req, res, next) => {
   const{title, body, pic} = req.body;
   if (!title || !body || !pic) {
