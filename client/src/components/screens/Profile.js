@@ -4,6 +4,9 @@ import {UserContext} from '../../App'
 const Profile = () => {
   const [pics, setPics] = useState([])
   const {state, dispatch} = useContext(UserContext)
+  const [image, setImage] = useState("")
+  const [url, setUrl] = useState("")
+
   useEffect(() => {
     fetch('/posts/myposts', {
       headers: {
@@ -13,13 +16,41 @@ const Profile = () => {
       setPics(result)
     })
   }, [])
+
+  useEffect(() => {
+    if (image) {
+      const data = new FormData()
+      data.append("file",image)
+      data.append("upload_preset","connect")
+      data.append("cloud_name","nithin")
+      fetch("https://api.cloudinary.com/v1_1/nithin/image/upload",{
+          method:"post",
+          body:data
+      })
+      .then(res=>res.json())
+      .then(data=>{
+         setUrl(data.url)
+         console.log(data)
+         localStorage.setItem("user", JSON.stringify({...state, pic:data.url}))
+         dispatch({type: "UPDATEPIC", payload:data.url})
+      })
+      .catch(err=>{
+          console.log(err)
+      })
+    }
+  }, [image])
+
+  const updatePic = (file) => {
+    setImage(file)
+
+  }
+
   return (
     <div style = {{maxWidth: "650px", margin: "0px auto"}}>
       <div style = {{
         display: "flex",
         justifyContent: "space-around",
-        margin: "18px 0px",
-        borderBottom: "1px solid gray"
+        margin: "18px 10px 0px 0px",
       }}>
         <div>
         <img style = {{width: "160px", height: "160px", borderRadius: "50%"}}
@@ -37,6 +68,15 @@ const Profile = () => {
         </div>
         </div>
 
+      </div>
+      <div className = "file-field input-field">
+      <div className = "btn">
+        <span>Update</span>
+        <input type="file" onChange={(e)=>updatePic(e.target.files[0])} />
+      </div>
+      <div className = "file-path-wrapper">
+        <input className = "file-path validate" type="text" />
+      </div>
       </div>
 
       <div className="gallery">
