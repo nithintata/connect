@@ -4,9 +4,9 @@ import {useParams} from 'react-router-dom'
 
 const Profile = () => {
   const [profile, setProfile] = useState(null)
-  const [showFollow, setShowFollow] = useState(true)
   const {state, dispatch} = useContext(UserContext)
   const{userId} = useParams()
+  const [showFollow, setShowFollow] = useState(state ? !state.following.includes(userId):true)
   useEffect(() => {
     fetch(`/users/${userId}`, {
       headers: {
@@ -111,7 +111,9 @@ const Profile = () => {
         </div>
       </div>
 
-      : <h2 className = "myfont"> Loading ...</h2>}
+      :
+      <h2 className ="myfont"> Loading..!</h2>
+         }
 
     </>
   )
