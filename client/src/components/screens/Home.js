@@ -133,7 +133,8 @@ const Home = () => {
       data.map(item => {
         return (
           <div className = "card home-card" key = {item._id}>
-            <h5 style={{padding: "6px"}}><Link to = {item.postedBy._id == state._id ? "/profile" : "/profile/"+item.postedBy._id} >{item.postedBy.name}</Link> {item.postedBy._id == state._id
+            <h5 style={{padding: "5px"}}><Link to = {item.postedBy._id == state._id ? "/profile" : "/profile/"+item.postedBy._id} >
+             <img src = {item.postedBy.pic} style = {{width: "30px", height: "30px", borderRadius: "50%"}} /> {item.postedBy.name}</Link> {item.postedBy._id == state._id
             && <i className = "material-icons" style={{float:"right", cursor:"pointer"}} onClick = {() => {deletePost(item._id)}}>delete</i>} </h5>
             <div className = "card-image">
               <img src = {item.photo} />

@@ -23,7 +23,7 @@ const Profile = () => {
       }}>
         <div>
         <img style = {{width: "160px", height: "160px", borderRadius: "50%"}}
-        src = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTkYHfs9m5fwgnQgDRyKtB65bLFFsIlgeFwFvSvzFvGERwo1-s2&usqp=CAU"
+        src = {state ? state.pic: "loading.."}
         />
         </div>
 

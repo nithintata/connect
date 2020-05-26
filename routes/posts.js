@@ -12,7 +12,7 @@ router.use(bodyParser.json());
 
 router.get('/all', authenticate.verifyUser, (req, res, next) => {
   Posts.find({})
-  .populate("postedBy", "_id name")
+  .populate("postedBy", "_id name pic")
   .populate("comments.postedBy", "_id name")
   .then((posts) => {
     res.json(posts);
@@ -21,7 +21,7 @@ router.get('/all', authenticate.verifyUser, (req, res, next) => {
 
 router.get('/myfeed', authenticate.verifyUser, (req, res, next) => {
   Posts.find({postedBy:{$in:req.user.following}})
-  .populate("postedBy", "_id name")
+  .populate("postedBy", "_id name pic")
   .populate("comments.postedBy", "_id name")
   .then((posts) => {
     res.json(posts);
@@ -46,7 +46,7 @@ router.post('/createpost', authenticate.verifyUser, (req, res, next) => {
 
 router.get('/myposts', authenticate.verifyUser, (req, res, next) => {
   Posts.find({postedBy: req.user._id})
-  .populate("postedBy", "_id name")
+  .populate("postedBy", "_id name pic")
   .populate("comments.postedBy", "_id name")
   .then((posts ) => {
     res.json(posts);
@@ -57,7 +57,7 @@ router.put('/like', authenticate.verifyUser, (req, res, next) => {
   Posts.findByIdAndUpdate(req.body.postId, {
     $push:{likes:req.user._id}
   },{new: true})
-  .populate("postedBy", "_id name")
+  .populate("postedBy", "_id name pic")
   .populate("comments.postedBy", "_id name")
   .exec((err, result) => {
      if (err) {
@@ -73,7 +73,7 @@ router.put('/unlike', authenticate.verifyUser, (req, res, next) => {
   Posts.findByIdAndUpdate(req.body.postId, {
     $pull:{likes:req.user._id}
   },{new: true})
-  .populate("postedBy", "_id name")
+  .populate("postedBy", "_id name pic")
   .populate("comments.postedBy", "_id name")
   .exec((err, result) => {
      if (err) {
@@ -93,7 +93,7 @@ router.put('/comment', authenticate.verifyUser, (req, res, next) => {
   Posts.findByIdAndUpdate(req.body.postId, {
     $push:{comments:comment}
   },{new: true})
-  .populate("postedBy", "_id name")
+  .populate("postedBy", "_id name pic")
   .populate("comments.postedBy", "_id name")
   .exec((err, result) => {
      if (err) {
@@ -107,7 +107,7 @@ router.put('/comment', authenticate.verifyUser, (req, res, next) => {
 
 router.delete('/deletepost/:postId', authenticate.verifyUser, (req, res, next) => {
   Posts.findOne({_id: req.params.postId})
-  .populate("postedBy", "_id name")
+  .populate("postedBy", "_id name pic")
   .exec((err, post) => {
     if (err || !post) {
       return res.status(422).json({error: err})
@@ -138,7 +138,7 @@ router.delete('/:postId/comments/:commentId', authenticate.verifyUser, (req, res
       post.save()
       .then(post => {
         Posts.findById(post._id)
-        .populate("postedBy", "_id name")
+        .populate("postedBy", "_id name pic")
         .populate("comments.postedBy", "_id name")
         .then(post => {
           res.json(post)

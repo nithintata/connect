@@ -44,7 +44,7 @@ router.get('/test', authenticate.verifyUser, function(req, res, next) {
 /*Registering new Users*/
 
 router.post('/signup', (req, res, next) => {
-  const {name, email, password} = req.body;
+  const {name, email, password, pic} = req.body;
   if (!name || !email || !password) {
     res.statusCode = 422;
     res.setHeader('Content-Type', 'application/json');
@@ -63,7 +63,7 @@ router.post('/signup', (req, res, next) => {
 
     bcrypt.hash(password, 12)
     .then((hashedPassword) => {
-      Users.create({name: name, email: email, password: hashedPassword})
+      Users.create({name: name, email: email, password: hashedPassword, pic:pic})
       .then((user) => {
         console.log("User Created Successfully");
         res.statusCode = 200;
@@ -101,8 +101,8 @@ router.post('/signin', (req, res, next) => {
           const token = jwt.sign({_id: user._id}, config.secretKey);
           res.statusCode = 200;
           res.setHeader('Content-Type', 'application/json');
-          const {_id, name, email, followers, following} = user;
-          res.json({token, user:{_id, name, email, followers, following}});
+          const {_id, name, email, followers, following, pic} = user;
+          res.json({token, user:{_id, name, email, followers, following, pic}});
         }
         else {
           res.statusCode = 422;
