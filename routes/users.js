@@ -37,8 +37,13 @@ router.get('/:userId',authenticate.verifyUser, (req, res, next) => {
 
 
 /* GET users listing. */
-router.get('/test', authenticate.verifyUser, function(req, res, next) {
-  res.send('responded after authentication');
+router.post('/search-users', (req, res, next) => {
+  let userPattern = new RegExp("^"+req.body.query)
+  Users.find({email: {$regex:userPattern}})
+  .select("_id email name pic")
+  .then(users => {
+    res.json({users: users});
+  }, err => next(err)).catch((err) => next(err));
 });
 
 /*Registering new Users*/

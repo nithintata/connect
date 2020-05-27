@@ -40,3 +40,7 @@ a {
   right: 25px !important;
   left: auto !important;
 }
+
+.collection-item {
+  width: 100%;
+}
