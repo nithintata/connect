@@ -148,5 +148,25 @@ router.delete('/:postId/comments/:commentId', authenticate.verifyUser, (req, res
   }, err => next(err)).catch(err => next(err));
 })
 
+router.put('/updatepost', authenticate.verifyUser, (req, res, next) => {
+  Posts.findByIdAndUpdate(req.body.postId, {$set: {title: req.body.title, body: req.body.body}},{new: true}, (err, result) => {
+    if (err) {
+      return res.status(422).json({error: "post cannot be updated"});
+    }
+    res.json(result)
+  })
+})
+
+router.get('/:postId', (req, res, next) => {
+  Posts.findById(req.params.postId)
+  .populate("postedBy", "_id name pic")
+  .populate("comments.postedBy", "_id name")
+  .then((post) => {
+    if (!post) {
+      return res.status(422).json({error: "post cannot be found"});
+    }
+    res.json(post);
+  }, (err) => next(err)).catch((err) => next(err));
+})
 
 module.exports = router;

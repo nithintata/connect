@@ -8,6 +8,7 @@ import Signin from './components/screens/Signin'
 import Signup from './components/screens/Signup'
 import CreatePost from './components/screens/CreatePost'
 import UserProfile from './components/screens/UserProfile'
+import UpdatePost from './components/screens/UpdatePost'
 import MyFeed from './components/screens/myFeed'
 import {reducer, initialState} from './reducers/userReducer'
 
@@ -41,6 +42,9 @@ const Routing = () => {
     </Route>
     <Route path = "/create-post">
       <CreatePost />
+    </Route>
+    <Route path = "/update-post/:postId">
+      <UpdatePost />
     </Route>
     <Route path = "/myfeed">
       <MyFeed />

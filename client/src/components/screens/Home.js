@@ -135,7 +135,8 @@ const Home = () => {
           <div className = "card home-card" key = {item._id}>
             <h5 style={{padding: "5px"}}><Link to = {item.postedBy._id == state._id ? "/profile" : "/profile/"+item.postedBy._id} >
              <img src = {item.postedBy.pic} style = {{width: "30px", height: "30px", borderRadius: "50%"}} /> {item.postedBy.name}</Link> {item.postedBy._id == state._id
-            && <i className = "material-icons" style={{float:"right", cursor:"pointer"}} onClick = {() => {deletePost(item._id)}}>delete</i>} </h5>
+            && <span style = {{float: "right"}}><Link style = {{float: "right"}} to = {"/update-post/" + item._id}><i className = "material-icons" style={{cursor:"pointer"}}>edit</i></Link>
+              <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {deletePost(item._id)}}>delete</i></span>}</h5>
             <div className = "card-image">
               <img src = {item.photo} />
             </div>
