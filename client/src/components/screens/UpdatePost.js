@@ -66,13 +66,16 @@ const UpdatePost = () => {
             <label style={{fontSize: "17px"}}> Body: </label>
             <input type = "text" value = {body} onChange = {(e) => setBody(e.target.value)} />
             <button className = "btn waves-effect waves-light #64b5f6 blue darken-1" onClick={() => updateData()}> Update Post </button>
+            <button style={{marginLeft: "20px"}} className = "btn waves-effect waves-light #d32f2f red darken-2" onClick={() => history.push('/')}> Cancel </button>
           </div>
         </div>
         :
         history.push('/')
-      
+
       :
-      <h2 className = "myfont">Loading...</h2>
+      <div class="progress">
+      <div class="indeterminate"></div>
+      </div>
     }
     </>
   )

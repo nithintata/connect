@@ -43,4 +43,9 @@ a {
 
 .collection-item {
   width: 100%;
+  border-bottom: 1px solid #26a69a !important;
+}
+
+.progress {
+  margin-top: -10px !important; 
 }

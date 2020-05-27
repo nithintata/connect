@@ -39,7 +39,12 @@ router.get('/:userId',authenticate.verifyUser, (req, res, next) => {
 /* GET users listing. */
 router.post('/search-users', (req, res, next) => {
   let userPattern = new RegExp("^"+req.body.query)
-  Users.find({email: {$regex:userPattern}})
+  Users.find({
+    $or: [
+      {email: {$regex:userPattern , $options : "i"}},
+      {name: {$regex: userPattern , $options : "i"}}
+    ]
+  })
   .select("_id email name pic")
   .then(users => {
     res.json({users: users});

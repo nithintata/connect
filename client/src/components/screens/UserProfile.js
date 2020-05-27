@@ -111,8 +111,10 @@ const Profile = () => {
       </div>
 
       :
-      <h2 className ="myfont"> Loading..!</h2>
-         }
+      <div class="progress">
+      <div class="indeterminate"></div>
+      </div>
+      }
 
     </>
   )

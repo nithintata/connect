@@ -65,16 +65,21 @@ const NavBar = () => {
     </div>
     <div id="modal1" className="modal" ref={searchModal} style={{color: "black"}}>
     <div className="modal-content">
-      <input type = "text" placeholder="search users" value = {search}
+      <input type = "text" placeholder="Search users" value = {search}
        onChange={(e) => fetchUsers(e.target.value)} autoFocus />
       <ul className="collection">
          {userDetails.map(item => {
-           return <Link to={item._id !== state._id ? "/profile/"+item._id : "/profile"} key = {item._id} onClick = {()=>{
+           return <Link to={item._id !== (state ? state._id : "0") ? "/profile/"+item._id : "/profile"} onClick = {()=>{
              M.Modal.getInstance(searchModal.current).close()
              setSearch("")
-           }}><li className="collection-item"><img src = {item.pic} style={{
-             width: "25px", height: "25px", borderRadius: "50%"
-           }} /> {item.email}</li></Link>
+           }}><li className="collection-item">
+                  <div style={{float: "left", padding: "10px"}}>
+                    <img src = {item.pic} style={{width: "50px", height: "50px", borderRadius: "50%"}} />
+                  </div>
+                  <div style={{float: "left"}}>
+                   <h6>{item.name}</h6>
+                   <h6>{item.email}</h6>
+                </div></li></Link>
          })}
        </ul>
     </div>
