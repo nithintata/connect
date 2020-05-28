@@ -14,6 +14,7 @@ router.get('/all', authenticate.verifyUser, (req, res, next) => {
   Posts.find({})
   .populate("postedBy", "_id name pic")
   .populate("comments.postedBy", "_id name")
+  .sort('-updatedAt')
   .then((posts) => {
     res.json(posts);
   }, (err) => next(err)).catch((err) => next(err));
@@ -23,6 +24,7 @@ router.get('/myfeed', authenticate.verifyUser, (req, res, next) => {
   Posts.find({postedBy:{$in:req.user.following}})
   .populate("postedBy", "_id name pic")
   .populate("comments.postedBy", "_id name")
+  .sort('-updatedAt')
   .then((posts) => {
     res.json(posts);
   }, (err) => next(err)).catch((err) => next(err));
@@ -48,6 +50,7 @@ router.get('/myposts', authenticate.verifyUser, (req, res, next) => {
   Posts.find({postedBy: req.user._id})
   .populate("postedBy", "_id name pic")
   .populate("comments.postedBy", "_id name")
+  .sort('-createdAt')
   .then((posts ) => {
     res.json(posts);
   }, (err) => next(err)).catch((err) => next(err));

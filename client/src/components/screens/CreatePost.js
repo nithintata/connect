@@ -8,6 +8,7 @@ const CreatePost = () => {
   const [body, setBody] = useState("")
   const [image, setImage] = useState("")
   const [url,setUrl] = useState("")
+  const [isUploading, setIsUploading] = useState(false)
 
     useEffect(()=>{
        if(url){
@@ -29,6 +30,7 @@ const CreatePost = () => {
               M.toast({html: data.error,classes:"#c62828 red darken-3"})
            }
            else{
+               setIsUploading(false)
                M.toast({html:"Created post Successfully",classes:"#43a047 green darken-1"})
                history.push('/')
            }
@@ -39,6 +41,7 @@ const CreatePost = () => {
     },[url])
 
     const postData = ()=>{
+         setIsUploading(true)
          const data = new FormData()
          data.append("file",image)
          data.append("upload_preset","connect")
@@ -59,25 +62,34 @@ const CreatePost = () => {
      }
 
   return (
-    <div className = "card input-field" style = {{
-      margin: "10px auto",
-      maxWidth: "500px",
-      padding: "20px",
-      textAlign: "center"
-    }}>
-      <input type = "text" placeholder = "Title" value ={title} onChange = {(e) => setTitle(e.target.value)} autoFocus />
-      <input type = "text" placeholder = "Body" value ={body} onChange = {(e) => setBody(e.target.value)} />
-      <div className = "file-field input-field">
-      <div className = "btn">
-        <span>Upload Image</span>
-        <input type="file" onChange={(e)=>setImage(e.target.files[0])} />
+    <>
+    {
+      !isUploading ?
+      <div className = "card input-field" style = {{
+        margin: "10px auto",
+        maxWidth: "500px",
+        padding: "20px",
+        textAlign: "center"
+      }}>
+        <input type = "text" placeholder = "Title" value ={title} onChange = {(e) => setTitle(e.target.value)} autoFocus />
+        <input type = "text" placeholder = "Body" value ={body} onChange = {(e) => setBody(e.target.value)} />
+        <div className = "file-field input-field">
+        <div className = "btn">
+          <span>Upload Image</span>
+          <input type="file" onChange={(e)=>setImage(e.target.files[0])} />
+        </div>
+        <div className = "file-path-wrapper">
+          <input className = "file-path validate" type="text" />
+        </div>
       </div>
-      <div className = "file-path-wrapper">
-        <input className = "file-path validate" type="text" />
+      <button className = "btn waves-effect waves-light #64b5f6 blue darken-1" onClick={() => postData()}> Create Post </button>
       </div>
-    </div>
-    <button className = "btn waves-effect waves-light #64b5f6 blue darken-1" onClick={() => postData()}> Create Post </button>
-    </div>
+      :
+      <div className="progress">
+      <div className="indeterminate"></div>
+      </div>
+    }
+    </>
   )
 }
 
