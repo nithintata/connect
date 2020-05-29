@@ -58,3 +58,24 @@ a {
 .card .card-image {
   position: initial !important;
 }
+
+.myrow {
+  margin: 10px auto;
+  display: flex;
+  justify-content: space-between;
+  max-width: 600px;
+}
+
+.myfooter {
+  position: fixed;
+  z-index: 990;
+  background-color: white;
+  bottom: 0px;
+  box-shadow: rgba(0, 0, 0, 0.14) 0px -5px 10px 0px,
+  rgba(0, 0, 0, 0.12) 5px 0px 20px -2px, rgba(0, 0, 0, 0.2) 5px 0px 0px 0px;
+  width: 100%;
+}
+
+.flink {
+  padding: 0px 5px
+}
