@@ -1,7 +1,9 @@
 import React,{useEffect, useState, useContext} from 'react'
 import {UserContext} from '../../App'
+import {Link, useHistory} from 'react-router-dom'
 
 const Profile = () => {
+  const history = useHistory()
   const [pics, setPics] = useState([])
   const {state, dispatch} = useContext(UserContext)
   const [image, setImage] = useState("")
@@ -97,7 +99,7 @@ const Profile = () => {
          {
            pics.map(item => {
              return (
-               <img key = {item._id} className="item" alt = {item.title} src = {item.photo} />
+               <img key = {item._id} className="item" onClick={() => history.push('/viewpost/'+item._id)} alt = {item.title} src = {item.photo} />
              )
            })
          }
@@ -105,9 +107,11 @@ const Profile = () => {
        </div>
 
        :
-
+       <div>
        <div className="progress">
        <div className="indeterminate"></div>
+       </div>
+       <h5 ClassName="myfont" style={{textAlign: "center", marginTop: "100px"}}>Updating...</h5>
        </div>
      }
     </>

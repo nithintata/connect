@@ -2,6 +2,7 @@ import React,{useEffect, useState, useContext} from 'react'
 import {UserContext} from '../../App'
 import M from 'materialize-css'
 import {Link} from 'react-router-dom'
+const moment = require('moment')
 
 const Home = () => {
   const [data, setData] = useState(undefined)
@@ -14,6 +15,7 @@ const Home = () => {
     }).then(res => res.json())
     .then(result => {
       console.log(result)
+      console.log(moment(result[0].updatedAt).utcOffset("+05:30").fromNow())
       setData(result)
     })
   }, [])
@@ -153,21 +155,28 @@ const Home = () => {
                 <h6>{item.likes.length} likes</h6>
                 <h5>{item.title}</h5>
                 <p>{item.body}</p>
-                {
-                  item.comments.map(comment => {
-                    return (
-                      <h6 key={comment._id}><span style = {{fontWeight: "500"}}>{comment.postedBy.name} : </span> {comment.text}
-                      {comment.postedBy._id == state._id
-                      && <i className = "tiny material-icons" style = {{color:"red", cursor:"pointer"}} onClick = {() => {deleteComment(item._id, comment._id)}}>delete</i>}</h6>
-                    )
-                  })
-                }
                 <form onSubmit = {(e) => {
                   e.preventDefault()
                   postComment(e.target[0].value, item._id)
                 }}>
                   <input type = "text" placeholder = "comment on this post" />
                 </form>
+                {
+                  item.comments.length >= 1 ?
+                      <h6 key={item.comments[0]._id}><span style = {{fontWeight: "500"}}>{item.comments[0].postedBy.name} : </span> {item.comments[0].text}
+                      {item.comments[0].postedBy._id == state._id
+                      && <i className = "tiny material-icons" style = {{color:"red", cursor:"pointer"}} onClick = {() => {deleteComment(item._id, item.comments[0]._id)}}>delete</i>}</h6>
+                    :
+                    ""
+                }
+                {
+                  item.comments.length >= 1 ?
+                      <Link style={{paddingTop: "5px"}} to = {"/viewpost/"+item._id}>View all {item.comments.length} comments</Link>
+                    :
+                    ""
+                }
+
+
               </div>
             </div>
           )

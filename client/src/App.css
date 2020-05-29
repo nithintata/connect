@@ -27,6 +27,7 @@ a {
 .item {
   width: 30%;
   margin-bottom: 20px;
+  cursor: pointer;
 }
 
 .home-card {
@@ -47,5 +48,9 @@ a {
 }
 
 .progress {
-  margin-top: -10px !important; 
+  margin-top: 1px !important;
 }
+
+/*.sidenav-overlay {
+  display: contents !important;
+}*/
