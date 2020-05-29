@@ -2,6 +2,7 @@ import React,{useEffect, useState, useContext} from 'react'
 import {UserContext} from '../../App'
 import M from 'materialize-css'
 import {Link, useParams, useHistory} from 'react-router-dom'
+const moment = require('moment')
 
 const ViewPost = () => {
   const history = useHistory()
@@ -102,10 +103,22 @@ const ViewPost = () => {
       post ?
 
       <div className = "card home-card" key = {post._id}>
-        <h5 style={{padding: "5px"}}><Link to = {post.postedBy._id == state._id ? "/profile" : "/profile/"+post.postedBy._id} >
-         <img src = {post.postedBy.pic} style = {{width: "30px", height: "30px", borderRadius: "50%"}} /> {post.postedBy.name}</Link> {post.postedBy._id == state._id
-        && <span style = {{float: "right"}}><Link style = {{float: "right"}} to = {"/update-post/" + post._id}><i className = "material-icons" style={{cursor:"pointer"}}>edit</i></Link>
-          <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {deletePost(post._id)}}>delete</i></span>}</h5>
+      <div>
+         <div style={{float: "left", padding: "10px"}}>
+           <Link to={post.postedBy._id == state._id ? "/profile" : "/profile/"+post.postedBy._id} >
+           <img src = {post.postedBy.pic} style={{width: "30px", height: "30px", borderRadius: "50%"}} />
+           </Link>
+         </div>
+         <div style={{float: "left"}}>
+          <div style={{fontSize: "1rem", lineHeight: "110%", padding:"2px", fontWeight: "600", marginTop: "5px"}}>{post.postedBy.name}</div>
+          <div style={{fontSize: "1rem", lineHeight: "110%", padding:"2px"}}>{moment(post.createdAt).utcOffset("+05:30").fromNow()} <i className = "tiny material-icons">public</i></div>
+        </div>
+        <div>{post.postedBy._id == state._id
+             && <span style = {{float: "right", marginTop: "10px"}}><Link style = {{float: "right"}} to = {"/update-post/" + post._id}><i className = "material-icons" style={{cursor:"pointer"}}>edit</i></Link>
+             <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {deletePost(post._id)}}>delete</i></span>}
+        </div>
+    </div>
+
         <div className = "card-image">
           <img src = {post.photo} />
         </div>

@@ -61,11 +61,11 @@ const NavBar = () => {
 
   return (
     <div>
-    <div class="navbar-fixed">
+    <div className="navbar-fixed">
     <nav>
     <div className="nav-wrapper white">
       <Link to= {state ? "/" : "/signin"} className="brand-logo myfont ">Connect</Link >
-      <Link to ={""} class="sidenav-trigger" data-target="slide-out">
+      <Link to ={""} className="sidenav-trigger" data-target="slide-out">
 			<i className="material-icons">menu</i>
 		  </Link>
       <ul id="nav-mobile" className="right hide-on-med-and-down ">

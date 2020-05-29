@@ -1,8 +1,9 @@
 import React,{useEffect, useState, useContext} from 'react'
 import {UserContext} from '../../App'
-import {useParams} from 'react-router-dom'
+import {useParams, useHistory} from 'react-router-dom'
 
 const Profile = () => {
+  const history = useHistory()
   const [profile, setProfile] = useState(null)
   const {state, dispatch} = useContext(UserContext)
   const{userId} = useParams()
@@ -103,7 +104,7 @@ const Profile = () => {
         {
           profile.posts.map(item => {
             return (
-              <img key = {item._id} className="item" alt = {item.title} src = {item.photo} />
+              <img key = {item._id} onClick={() => history.push('/viewpost/'+item._id)} className="item" alt = {item.title} src = {item.photo} />
             )
           })
         }

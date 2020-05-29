@@ -2,6 +2,7 @@ import React,{useEffect, useState, useContext} from 'react'
 import {UserContext} from '../../App'
 import M from 'materialize-css'
 import {Link} from 'react-router-dom'
+const moment = require('moment')
 
 const Home = () => {
   const [data, setData] = useState(undefined)
@@ -137,9 +138,22 @@ const Home = () => {
          data.map(item => {
            return (
              <div className = "card home-card" key = {item._id}>
-               <h5 style={{padding: "6px"}}><Link to = {item.postedBy._id == state._id ? "/profile" : "/profile/"+item.postedBy._id} >
-                <img src = {item.postedBy.pic} style = {{width: "30px", height: "30px", borderRadius: "50%"}} /> {item.postedBy.name}</Link> {item.postedBy._id == state._id
-               && <i className = "material-icons" style={{float:"right", cursor:"pointer"}} onClick = {() => {deletePost(item._id)}}>delete</i>} </h5>
+                 <div>
+                    <div style={{float: "left", padding: "10px"}}>
+                      <Link to={item.postedBy._id == state._id ? "/profile" : "/profile/"+item.postedBy._id} >
+                      <img src = {item.postedBy.pic} style={{width: "30px", height: "30px", borderRadius: "50%"}} />
+                      </Link>
+                    </div>
+                    <div style={{float: "left"}}>
+                     <div style={{fontSize: "1rem", lineHeight: "110%", padding:"2px", fontWeight: "600", marginTop: "5px"}}>{item.postedBy.name}</div>
+                     <div style={{fontSize: "1rem", lineHeight: "110%", padding:"2px"}}>{moment(item.createdAt).utcOffset("+05:30").fromNow()} <i className = "tiny material-icons">public</i></div>
+                   </div>
+                   <div>{item.postedBy._id == state._id
+                        && <span style = {{float: "right", marginTop: "10px"}}><Link style = {{float: "right"}} to = {"/update-post/" + item._id}><i className = "material-icons" style={{cursor:"pointer"}}>edit</i></Link>
+                        <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {deletePost(item._id)}}>delete</i></span>}
+                   </div>
+               </div>
+
                <div className = "card-image">
                  <img src = {item.photo} />
                </div>
@@ -149,24 +163,31 @@ const Home = () => {
                ? <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {unlikePost(item._id)}}>thumb_down</i>
                : <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {likePost(item._id)}}>thumb_up</i>
                }
-                 <h6>{item.likes.length} likes</h6>
+                 <h6>{item.likes.length} likes. {item.comments.length} comments</h6>
                  <h5>{item.title}</h5>
                  <p>{item.body}</p>
-                 {
-                   item.comments.map(comment => {
-                     return (
-                       <h6 key={comment._id}><span style = {{fontWeight: "500"}}>{comment.postedBy.name} : </span> {comment.text}
-                       {comment.postedBy._id == state._id
-                       && <i className = "tiny material-icons" style = {{color:"red", cursor:"pointer"}} onClick = {() => {deleteComment(item._id, comment._id)}}>delete</i>}</h6>
-                     )
-                   })
-                 }
                  <form onSubmit = {(e) => {
                    e.preventDefault()
                    postComment(e.target[0].value, item._id)
                  }}>
                    <input type = "text" placeholder = "comment on this post" />
                  </form>
+                 {
+                   item.comments.length >= 1 ?
+                       <h6 key={item.comments[0]._id}><span style = {{fontWeight: "500"}}>{item.comments[0].postedBy.name} : </span> {item.comments[0].text}
+                       {item.comments[0].postedBy._id == state._id
+                       && <i className = "tiny material-icons" style = {{color:"red", cursor:"pointer"}} onClick = {() => {deleteComment(item._id, item.comments[0]._id)}}>delete</i>}</h6>
+                     :
+                     ""
+                 }
+                 {
+                   item.comments.length >= 1 ?
+                       <Link style={{paddingTop: "5px"}} to = {"/viewpost/"+item._id}>View all {item.comments.length} comments</Link>
+                     :
+                     ""
+                 }
+
+
                </div>
              </div>
            )

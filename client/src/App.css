@@ -54,3 +54,7 @@ a {
 /*.sidenav-overlay {
   display: contents !important;
 }*/
+
+.card .card-image {
+  position: initial !important;
+}

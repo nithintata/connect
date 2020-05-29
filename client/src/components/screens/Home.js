@@ -15,7 +15,6 @@ const Home = () => {
     }).then(res => res.json())
     .then(result => {
       console.log(result)
-      console.log(moment(result[0].updatedAt).utcOffset("+05:30").fromNow())
       setData(result)
     })
   }, [])
@@ -139,10 +138,22 @@ const Home = () => {
         data.map(item => {
           return (
             <div className = "card home-card" key = {item._id}>
-              <h5 style={{padding: "5px"}}><Link to = {item.postedBy._id == state._id ? "/profile" : "/profile/"+item.postedBy._id} >
-               <img src = {item.postedBy.pic} style = {{width: "30px", height: "30px", borderRadius: "50%"}} /> {item.postedBy.name}</Link> {item.postedBy._id == state._id
-              && <span style = {{float: "right"}}><Link style = {{float: "right"}} to = {"/update-post/" + item._id}><i className = "material-icons" style={{cursor:"pointer"}}>edit</i></Link>
-                <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {deletePost(item._id)}}>delete</i></span>}</h5>
+                <div>
+                   <div style={{float: "left", padding: "10px"}}>
+                     <Link to={item.postedBy._id == state._id ? "/profile" : "/profile/"+item.postedBy._id} >
+                     <img src = {item.postedBy.pic} style={{width: "30px", height: "30px", borderRadius: "50%"}} />
+                     </Link>
+                   </div>
+                   <div style={{float: "left"}}>
+                    <div style={{fontSize: "1rem", lineHeight: "110%", padding:"2px", fontWeight: "600", marginTop: "5px"}}>{item.postedBy.name}</div>
+                    <div style={{fontSize: "1rem", lineHeight: "110%", padding:"2px"}}>{moment(item.createdAt).utcOffset("+05:30").fromNow()} <i className = "tiny material-icons">public</i></div>
+                  </div>
+                  <div>{item.postedBy._id == state._id
+                       && <span style = {{float: "right", marginTop: "10px"}}><Link style = {{float: "right"}} to = {"/update-post/" + item._id}><i className = "material-icons" style={{cursor:"pointer"}}>edit</i></Link>
+                       <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {deletePost(item._id)}}>delete</i></span>}
+                  </div>
+              </div>
+
               <div className = "card-image">
                 <img src = {item.photo} />
               </div>
@@ -152,7 +163,7 @@ const Home = () => {
               ? <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {unlikePost(item._id)}}>thumb_down</i>
               : <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {likePost(item._id)}}>thumb_up</i>
               }
-                <h6>{item.likes.length} likes</h6>
+                <h6>{item.likes.length} likes. {item.comments.length} comments</h6>
                 <h5>{item.title}</h5>
                 <p>{item.body}</p>
                 <form onSubmit = {(e) => {
