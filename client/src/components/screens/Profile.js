@@ -1,15 +1,18 @@
-import React,{useEffect, useState, useContext} from 'react'
+import React,{useEffect, useState, useContext, useRef} from 'react'
 import {UserContext} from '../../App'
 import {Link, useHistory} from 'react-router-dom'
+import M from 'materialize-css'
 
 const Profile = () => {
   const history = useHistory()
+  const tabs = useRef(null)
   const [pics, setPics] = useState([])
   const {state, dispatch} = useContext(UserContext)
   const [image, setImage] = useState("")
   const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
+    M.Tabs.init(tabs.current, {swipeable: true});
     fetch('/posts/myposts', {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("jwt")      }
@@ -95,7 +98,17 @@ const Profile = () => {
          </div>
          </div>
 
-         <div className="gallery">
+        <div ClassName="row">
+          <div className="col s12">
+          <ul className="tabs tabs-fixed-width" ref={tabs}>
+            <li className="tab col s3"><a href="#test1">Test 1</a></li>
+            <li className="tab col s3"><a className="active" href="#collection">Test 2</a></li>
+          </ul>
+        </div></div>
+        <div id="test1" className="col s12">Test 1</div>
+        
+        <div id = "collection" className="col s12">
+          <div className="gallery">
          {
            pics.map(item => {
              return (
@@ -103,8 +116,10 @@ const Profile = () => {
              )
            })
          }
-         </div>
-       </div>
+          </div>
+        </div>
+
+      </div>
 
        :
        <div>

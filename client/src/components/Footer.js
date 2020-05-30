@@ -5,9 +5,11 @@ import M from 'materialize-css'
 
 
 const Footer = () => {
-
+  const {state, dispatch} = useContext(UserContext)
 
   return (
+    <>
+   {  state ?
     <footer className="myfooter show-on-medium-and-down hide-on-large-only">
       <div class="container">
         <div class= "row myrow">
@@ -20,6 +22,10 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    :
+    ""
+  }
+    </>
   )
 }
 
