@@ -111,8 +111,8 @@ router.post('/signin', (req, res, next) => {
           const token = jwt.sign({_id: user._id}, config.secretKey);
           res.statusCode = 200;
           res.setHeader('Content-Type', 'application/json');
-          const {_id, name, email, followers, following, pic} = user;
-          res.json({token, user:{_id, name, email, followers, following, pic}});
+          const {_id, name, email, followers, following, pic, favourites} = user;
+          res.json({token, user:{_id, name, email, followers, following, pic, favourites}});
         }
         else {
           res.statusCode = 422;

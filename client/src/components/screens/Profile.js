@@ -6,6 +6,7 @@ import M from 'materialize-css'
 const Profile = () => {
   const history = useHistory()
   const tabs = useRef(null)
+  const [fav, setFav] = useState([])
   const [pics, setPics] = useState([])
   const {state, dispatch} = useContext(UserContext)
   const [image, setImage] = useState("")
@@ -19,6 +20,20 @@ const Profile = () => {
     }).then(res => res.json())
     .then(result => {
       setPics(result)
+    })
+
+
+
+  }, [])
+
+  useEffect(() => {
+    fetch ('/posts/myfav', {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      }
+    }).then(res => res.json())
+    .then(result => {
+      setFav(result)
     })
   }, [])
 
@@ -98,26 +113,42 @@ const Profile = () => {
          </div>
          </div>
 
-        <div ClassName="row">
-          <div className="col s12">
-          <ul className="tabs tabs-fixed-width" ref={tabs}>
-            <li className="tab col s3"><a href="#test1">Test 1</a></li>
-            <li className="tab col s3"><a className="active" href="#collection">Test 2</a></li>
-          </ul>
-        </div></div>
-        <div id="test1" className="col s12">Test 1</div>
-        
-        <div id = "collection" className="col s12">
-          <div className="gallery">
-         {
-           pics.map(item => {
-             return (
-               <img key = {item._id} className="item" onClick={() => history.push('/viewpost/'+item._id)} alt = {item.title} src = {item.photo} />
-             )
-           })
-         }
-          </div>
+         <div className="row">
+        <div className="col s12">
+            <ul id="tabs-swipe-demo" className="tabs tabs-fixed-width" ref={tabs}>
+                <li className="tab col s3"><a href="#test-swipe-1"><i className="material-icons">
+                favorite</i></a></li>
+                <li className="tab col s3"><a className="active" href="#test-swipe-2">
+                <i className="material-icons">collections</i></a></li>
+            </ul>
+            <div id="test-swipe-2" className="col s12">
+            <div className="gallery">
+           { pics && pics.length > 0 ?
+             pics.map(item => {
+               return (
+                 <img key = {item._id} className="item" onClick={() => history.push('/viewpost/'+item._id)} alt = {item.title} src = {item.photo} />
+               )
+             }) : <h5 style={{textAlign: "center"}}>Create a post to see it here</h5>
+           }
+            </div>
+            </div>
+            <div id="test-swipe-1" className="col s12">
+            <div className="gallery">
+           { fav && fav.length > 0 ?
+             fav.map(item => {
+               return (
+                 <img key = {item._id} className="item" onClick={() => history.push('/viewpost/'+item._id)} alt = {item.title} src = {item.photo} />
+               )
+             }) : <h5 style={{textAlign: "center"}}>Add posts to favourites to see them here</h5>
+           }
+            </div>
+            </div>
+
         </div>
+    </div>
+
+
+
 
       </div>
 

@@ -56,6 +56,16 @@ router.get('/myposts', authenticate.verifyUser, (req, res, next) => {
   }, (err) => next(err)).catch((err) => next(err));
 });
 
+router.get('/myfav', authenticate.verifyUser, (req, res, next) => {
+  Posts.find({_id: {$in: req.user.favourites}})
+  .populate("postedBy", "_id name pic")
+  .populate("comments.postedBy", "_id name")
+  .sort('-createdAt')
+  .then((posts ) => {
+    res.json(posts);
+  }, (err) => next(err)).catch((err) => next(err));
+});
+
 router.put('/like', authenticate.verifyUser, (req, res, next) => {
   Posts.findByIdAndUpdate(req.body.postId, {
     $push:{likes:req.user._id}

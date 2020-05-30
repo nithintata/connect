@@ -30,6 +30,11 @@ a {
   cursor: pointer;
 }
 
+div.tabs-content.carousel.carousel-slider {
+  margin-top: 20px;
+  height: 600px !important;
+}
+
 .home-card {
   max-width: 500px;
   height: max-content;

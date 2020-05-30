@@ -17,6 +17,13 @@ export const reducer = (state, action) => {
     }
   }
 
+  if (action.type == "UPDATEFAV") {
+    return {
+      ...state,
+      favourites: action.payload.favourites
+    }
+  }
+
   if (action.type == "UPDATEPIC") {
     return {
       ...state,
