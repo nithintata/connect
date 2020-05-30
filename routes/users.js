@@ -124,6 +124,33 @@ router.post('/signin', (req, res, next) => {
   }, (err) => next(err)).catch((err) => next(err));
 });
 
+router.put('/addtofav', authenticate.verifyUser, (req, res, next) => {
+  Users.findByIdAndUpdate(req.user._id, {
+    $push:{favourites:req.body.postId}
+  },{new: true}).select("-password")
+  .exec((err, result) => {
+     if (err) {
+       return res.status(422).json({error: err})
+     }
+     else {
+       res.json(result)
+     }
+  })
+});
+
+router.put('/removefromfav', authenticate.verifyUser, (req, res, next) => {
+  Users.findByIdAndUpdate(req.user._id, {
+    $pull:{favourites:req.body.postId}
+  },{new: true}).select("-password")
+  .exec((err, result) => {
+     if (err) {
+       return res.status(422).json({error: err})
+     }
+     else {
+       res.json(result)
+     }
+  })
+});
 
 router.put('/follow', authenticate.verifyUser, (req, res, next) => {
   Users.findByIdAndUpdate(req.body.followId, {

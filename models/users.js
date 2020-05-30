@@ -31,7 +31,9 @@ const userSchema = new Schema({
   following: [{
     type: ObjectId,
     ref: "User"
-  }]
+  }],
+
+  favourites: [{type: ObjectId, ref: "Post"}]
 }, {
     timestamps: true
 });
