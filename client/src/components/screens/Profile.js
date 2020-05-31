@@ -14,9 +14,12 @@ const Profile = () => {
 
   useEffect(() => {
     M.Tabs.init(tabs.current, {swipeable: true});
-    fetch('/posts/myposts', {
+    fetch('./posts/myposts', {
       headers: {
-        "Authorization": "Bearer " + localStorage.getItem("jwt")      }
+        "Authorization": "Bearer " + localStorage.getItem("jwt"),
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
     }).then(res => res.json())
     .then(result => {
       setPics(result)
@@ -27,9 +30,11 @@ const Profile = () => {
   }, [])
 
   useEffect(() => {
-    fetch ('/posts/myfav', {
+    fetch ('./posts/myfav', {
       headers: {
-        "Authorization": "Bearer " + localStorage.getItem("jwt")
+        "Authorization": "Bearer " + localStorage.getItem("jwt"),
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       }
     }).then(res => res.json())
     .then(result => {
