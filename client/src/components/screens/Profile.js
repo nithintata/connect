@@ -15,7 +15,7 @@ const Profile = () => {
   useEffect(() => {
     console.log("Running")
     M.Tabs.init(tabs.current, {swipeable: true});
-    fetch('/posts/myposts', {
+    fetch('./posts/myposts', {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("jwt"),
         'Content-Type': 'application/json',
