@@ -83,6 +83,39 @@ const ViewPost = () => {
     })
   }
 
+  const addtoFav = (postId) => {
+    fetch('/users/addtofav', {
+      method: "put",
+      headers: {
+        "Content-Type" : "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        postId: postId
+      })
+    }).then(res => res.json()).then(result => {
+      dispatch({type: "UPDATEFAV", payload:{favourites: result.favourites}})
+      localStorage.setItem("user", JSON.stringify(result))
+    })
+  }
+
+  const removefromFav = (postId) => {
+    fetch('/users/removefromfav', {
+      method: "put",
+      headers: {
+        "Content-Type" : "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        postId: postId
+      })
+    }).then(res => res.json()).then(result => {
+      dispatch({type: "UPDATEFAV", payload:{favourites: result.favourites}})
+      localStorage.setItem("user", JSON.stringify(result))
+    })
+  }
+
+
   const deleteComment = (postId, commentId) => {
     fetch(`/posts/${postId}/comments/${commentId}`, {
       method: "delete",
@@ -120,12 +153,19 @@ const ViewPost = () => {
     </div>
 
         <div className = "card-image">
-          <img src = {post.photo} />
+          <img src = {post.photo} onDoubleClick={() => {
+            state && state.favourites.includes(post._id)
+             ? removefromFav(post._id)
+             : addtoFav(post._id)  
+          }}/>
         </div>
         <div className = "card-content">
-        <i className = "material-icons" style = {{color:"red"}}>favorite</i>
+        {state && state.favourites.includes(post._id)
+         ? <i className = "material-icons" style = {{color:"red", cursor:"pointer"}} onClick = {() => {removefromFav(post._id)}}>favorite</i>
+         : <i className = "material-icons" style = {{color:"red", cursor:"pointer"}} onClick = {() => {addtoFav(post._id)}}>favorite_border</i>
+        }
         {post.likes.includes(state._id)
-        ? <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {unlikePost(post._id)}}>thumb_down</i>
+        ? <i className = "material-icons" style={{cursor:"pointer", color: "blue"}} onClick = {() => {unlikePost(post._id)}}>thumb_up</i>
         : <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {likePost(post._id)}}>thumb_up</i>
         }
           <h6>{post.likes.length} likes. {post.comments.length} comments</h6>

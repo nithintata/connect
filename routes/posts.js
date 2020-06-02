@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
 const Posts = require('../models/posts');
-const config = require('../config');
+const config = require('../config/config');
 const authenticate = require('../authenticate');
 
 var router = express.Router();

@@ -107,6 +107,38 @@ const Home = () => {
     })
   }
 
+  const addtoFav = (postId) => {
+    fetch('/users/addtofav', {
+      method: "put",
+      headers: {
+        "Content-Type" : "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        postId: postId
+      })
+    }).then(res => res.json()).then(result => {
+      dispatch({type: "UPDATEFAV", payload:{favourites: result.favourites}})
+      localStorage.setItem("user", JSON.stringify(result))
+    })
+  }
+
+  const removefromFav = (postId) => {
+    fetch('/users/removefromfav', {
+      method: "put",
+      headers: {
+        "Content-Type" : "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        postId: postId
+      })
+    }).then(res => res.json()).then(result => {
+      dispatch({type: "UPDATEFAV", payload:{favourites: result.favourites}})
+      localStorage.setItem("user", JSON.stringify(result))
+    })
+  }
+
   const deleteComment = (postId, commentId) => {
     fetch(`/posts/${postId}/comments/${commentId}`, {
       method: "delete",
@@ -155,12 +187,19 @@ const Home = () => {
                </div>
 
                <div className = "card-image">
-                 <img src = {item.photo} />
+                 <img src = {item.photo} onDoubleClick={() => {
+                   state && state.favourites.includes(item._id)
+                    ? removefromFav(item._id)
+                    : addtoFav(item._id)
+                 }}/>
                </div>
                <div className = "card-content">
-               <i className = "material-icons" style = {{color:"red"}}>favorite</i>
+               {state && state.favourites.includes(item._id)
+                ? <i className = "material-icons" style = {{color:"red", cursor:"pointer"}} onClick = {() => {removefromFav(item._id)}}>favorite</i>
+                : <i className = "material-icons" style = {{color:"red", cursor:"pointer"}} onClick = {() => {addtoFav(item._id)}}>favorite_border</i>
+               }
                {item.likes.includes(state._id)
-               ? <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {unlikePost(item._id)}}>thumb_down</i>
+               ? <i className = "material-icons" style={{cursor:"pointer", color: "blue"}} onClick = {() => {unlikePost(item._id)}}>thumb_up</i>
                : <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {likePost(item._id)}}>thumb_up</i>
                }
                  <h6>{item.likes.length} likes. {item.comments.length} comments</h6>

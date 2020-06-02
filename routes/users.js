@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 
 const Users = require('../models/users');
 const Posts = mongoose.model("Post")
-const config = require('../config');
+const config = require('../config/config');
 const authenticate = require('../authenticate');
 
 var router = express.Router();

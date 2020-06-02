@@ -187,7 +187,11 @@ const Home = () => {
               </div>
 
               <div className = "card-image">
-                <img src = {item.photo} />
+                <img src = {item.photo} onDoubleClick={() => {
+                  state && state.favourites.includes(item._id)
+                   ? removefromFav(item._id)
+                   : addtoFav(item._id)
+                }}/>
               </div>
               <div className = "card-content">
               {state && state.favourites.includes(item._id)
@@ -196,7 +200,7 @@ const Home = () => {
               }
 
               {item.likes.includes(state._id)
-              ? <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {unlikePost(item._id)}}>thumb_down</i>
+              ? <i className = "material-icons" style={{cursor:"pointer", color: "blue"}} onClick = {() => {unlikePost(item._id)}}>thumb_up</i>
               : <i className = "material-icons" style={{cursor:"pointer"}} onClick = {() => {likePost(item._id)}}>thumb_up</i>
               }
                 <h6>{item.likes.length} likes. {item.comments.length} comments</h6>

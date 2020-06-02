@@ -13,7 +13,6 @@ const Profile = () => {
   const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
-    console.log("Running")
     M.Tabs.init(tabs.current, {swipeable: true});
     fetch('./posts/myposts', {
       headers: {
@@ -59,7 +58,7 @@ const Profile = () => {
              "Authorization": "Bearer " + localStorage.getItem("jwt")
            },
            body: JSON.stringify({
-             pic: data.url
+             pic: data.secure_url
            })
          }).then(res => res.json()).then(result => {
            localStorage.setItem("user", JSON.stringify({...state, pic:result.pic}))
@@ -99,9 +98,9 @@ const Profile = () => {
            <h4>{state ? state.name : "Loading.."}</h4>
            <h5>{state ? state.email : "Loading.."}</h5>
            <div style = {{display: "flex",justifyContent: "space-between", width: "108%"}}>
-             <h6>{pics && pics.length} posts</h6>
-             <h6>{state ? state.followers.length : "0"} followers</h6>
-             <h6>{state ? state.following.length : "0"} following</h6>
+             <h6><b>{pics && pics.length}</b> posts</h6>
+             <h6><b>{state ? state.followers.length : "0"}</b> followers</h6>
+             <h6><b>{state ? state.following.length : "0"}</b> following</h6>
            </div>
            </div>
 

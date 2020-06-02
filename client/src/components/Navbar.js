@@ -78,17 +78,14 @@ const NavBar = () => {
        onChange={(e) => fetchUsers(e.target.value)} autoFocus />
       <ul className="collection">
          {userDetails.map(item => {
-           return <Link to={item._id !== (state ? state._id : "0") ? "/profile/"+item._id : "/profile"} onClick = {()=>{
+           return <Link key={item._id} to={item._id !== (state ? state._id : "0") ? "/profile/"+item._id : "/profile"} onClick = {()=>{
              M.Modal.getInstance(searchModal.current).close()
              setSearch("")
-           }}><li className="collection-item">
-                  <div style={{float: "left", padding: "10px"}}>
-                    <img src = {item.pic} style={{width: "50px", height: "50px", borderRadius: "50%"}} />
-                  </div>
-                  <div style={{float: "left"}}>
-                   <h6>{item.name}</h6>
-                   <h6>{item.email}</h6>
-                </div></li></Link>
+           }}><li className="collection-item avatar">
+                    <img src = {item.pic} className="circle" />
+                   <span className="title">{item.name}</span>
+                   <p>{item.email}</p>
+                  </li></Link>
          })}
        </ul>
     </div>
