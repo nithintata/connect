@@ -18,6 +18,10 @@ const userSchema = new Schema({
     required: true
   },
 
+  resetToken: String,
+  
+  expireToken: Date,
+
   pic: {
     type: String,
     default: "https://res.cloudinary.com/nithin/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1590493126/avatar_bfwjyx.jpg"

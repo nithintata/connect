@@ -12,6 +12,7 @@ import UserProfile from './components/screens/UserProfile'
 import UpdatePost from './components/screens/UpdatePost'
 import MyFeed from './components/screens/myFeed'
 import ViewPost from './components/screens/ViewPost'
+import Reset from './components/screens/Reset'
 import {reducer, initialState} from './reducers/userReducer'
 
 export const UserContext = createContext()
@@ -25,7 +26,8 @@ const Routing = () => {
       dispatch({type: "USER", payload: user})
     }
     else {
-      history.push('/signin')
+      if (!history.location.pathname.startsWith('/reset'))
+        history.push('/signin')
     }
   }, [])
   return (
@@ -56,6 +58,9 @@ const Routing = () => {
     </Route>
     <Route path = "/profile/:userId">
       <UserProfile />
+    </Route>
+    <Route path = "/reset">
+      <Reset />
     </Route>
     </Switch>
   )

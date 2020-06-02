@@ -1,6 +1,7 @@
 var express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -8,7 +9,14 @@ const Users = require('../models/users');
 const Posts = mongoose.model("Post")
 const config = require('../config/config');
 const authenticate = require('../authenticate');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport')
 
+const transporter = nodemailer.createTransport(sendgridTransport({
+  auth: {
+    api_key: config.nodemailer_api
+  }
+}));
 var router = express.Router();
 router.use(bodyParser.json());
 
@@ -75,6 +83,12 @@ router.post('/signup', (req, res, next) => {
     .then((hashedPassword) => {
       Users.create({name: name, email: email, password: hashedPassword, pic:pic})
       .then((user) => {
+        transporter.sendMail({
+          to: user.email,
+          from: "destructerdavid@gmail.com",
+          subject: "Signup Success",
+          html: "<h2>Welcome to Connect</h2><p>Your account has been created Successfully</p><p><a href='https://connect-in.herokuapp.com/'>click here</a>to login into your account</p>"
+        })
         console.log("User Created Successfully");
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -195,5 +209,33 @@ router.put('/updatepic', authenticate.verifyUser, (req, res, next) => {
   })
 })
 
+router.post('/reset-password', (req, res, next) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+    }
+    const token = buffer.toString("hex")
+    Users.findOne({email: req.body.email})
+    .then((user) => {
+      if (!user) {
+        return res.status(422).json({error: "User doesn't exist with that email"})
+      }
+      user.resetToken = token
+      user.expireToken = Date.now() + 3600000
+      user.save().then((result) => {
+        transporter.sendMail({
+          to: user.email,
+          from: "destructerdavid@gmail.com",
+          subject: "password-reset",
+          html: `
+          <p>Your have requested for your password reset</p>
+          <h5>click this <a href="http://localhost:3000/reset/${token}">link</a> to reset your password</h5>
+          `
+        })
+        res.json({message: "Check your mail!"})
+      })
+    })
+  })
+})
 
 module.exports = router;
