@@ -67,6 +67,7 @@ const Profile = () => {
          })
       })
       .catch(err=>{
+          setIsUploading(false)
           console.log(err)
       })
     }

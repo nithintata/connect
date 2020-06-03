@@ -13,6 +13,7 @@ import UpdatePost from './components/screens/UpdatePost'
 import MyFeed from './components/screens/myFeed'
 import ViewPost from './components/screens/ViewPost'
 import Reset from './components/screens/Reset'
+import UpdatePassword from './components/screens/Newpassword'
 import {reducer, initialState} from './reducers/userReducer'
 
 export const UserContext = createContext()
@@ -59,8 +60,11 @@ const Routing = () => {
     <Route path = "/profile/:userId">
       <UserProfile />
     </Route>
-    <Route path = "/reset">
+    <Route exact path = "/reset">
       <Reset />
+    </Route>
+    <Route path = "/reset/:token">
+      <UpdatePassword />
     </Route>
     </Switch>
   )

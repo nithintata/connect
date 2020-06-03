@@ -9,6 +9,7 @@ const Signup = () => {
   const [email, setEmail] = useState("")
   const [image, setImage] = useState("")
   const [url, setUrl] = useState(undefined)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (url) {
@@ -47,6 +48,7 @@ const Signup = () => {
          pic: url
        })
      }).then(res => res.json()).then(data => {
+       setIsLoading(false)
        if (data.error) {
           M.toast({html: data.error, classes: "#c62828 red darken-3"})
        }
@@ -54,11 +56,15 @@ const Signup = () => {
          M.toast({html: data.message, classes: "#43a047 green darken-1"})
          history.push('/signin')
        }
-     }).catch((err) => {console.log(err)})
+     }).catch((err) => {
+       setIsLoading(false)
+       console.log(err)
+     })
    }
 
 
   const PostData = () => {
+    setIsLoading(true)
     if(image) {
       uploadPic()
     }
@@ -68,25 +74,37 @@ const Signup = () => {
   }
 
   return (
-    <div className = "mycard">
-    <div className = "card auth-card">
-      <h3 className =  "myfont"> Connect </h3>
-      <input type = "text" placeholder = "Name" value={name} onChange = {(e) => setName(e.target.value)} autoFocus required />
-      <input type = "text" placeholder = "Email" value={email} onChange = {(e) => setEmail(e.target.value)} required />
-      <input type = "password" placeholder = "Password" value={password} onChange = {(e) => setPassword(e.target.value)} required />
-      <div className = "file-field input-field">
-      <div className = "btn">
-        <span>Upload Pic</span>
-        <input type="file" onChange={(e)=>setImage(e.target.files[0])} />
+    <>
+    {
+      !isLoading ?
+
+      <div className = "mycard">
+      <div className = "card auth-card">
+        <h3 className =  "myfont"> Connect </h3>
+        <input type = "text" placeholder = "Name" value={name} onChange = {(e) => setName(e.target.value)} autoFocus required />
+        <input type = "text" placeholder = "Email" value={email} onChange = {(e) => setEmail(e.target.value)} required />
+        <input type = "password" placeholder = "Password" value={password} onChange = {(e) => setPassword(e.target.value)} required />
+        <div className = "file-field input-field">
+        <div className = "btn">
+          <span>Upload Pic</span>
+          <input type="file" onChange={(e)=>setImage(e.target.files[0])} />
+        </div>
+        <div className = "file-path-wrapper">
+          <input className = "file-path validate" type="text" />
+        </div>
       </div>
-      <div className = "file-path-wrapper">
-        <input className = "file-path validate" type="text" />
+        <button className = "btn waves-effect waves-light" onClick = {() => PostData()}> Register </button>
+        <h6> <Link to= "/signin"> Already have an account ? </Link></h6>
       </div>
-    </div>
-      <button className = "btn waves-effect waves-light" onClick = {() => PostData()}> Register </button>
-      <h6> <Link to= "/signin"> Already have an account ? </Link></h6>
-    </div>
-    </div>
+      </div>
+
+      :
+
+      <div className="progress">
+      <div className="indeterminate"></div>
+      </div>
+    }
+   </>
   )
 }
 

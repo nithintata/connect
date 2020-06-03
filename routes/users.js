@@ -229,13 +229,32 @@ router.post('/reset-password', (req, res, next) => {
           subject: "password-reset",
           html: `
           <p>Your have requested for your password reset</p>
-          <h5>click this <a href="http://localhost:3000/reset/${token}">link</a> to reset your password</h5>
+          <h5>click this <a href="${config.domain}/reset/${token}">link</a> to reset your password</h5>
           `
         })
         res.json({message: "Check your mail!"})
       })
     })
   })
+})
+
+router.post('/update-password', (req, res, next) => {
+  const newPassword = req.body.password
+  const sentToken = req.body.token
+  Users.findOne({resetToken: sentToken, expireToken:{$gt:Date.now()}})
+  .then((user) => {
+    if (!user) {
+      return res.status(422).json({error: "This link has expired!"})
+    }
+    bcrypt.hash(newPassword, 12).then(hashedPassword => {
+      user.password = hashedPassword
+      user.resetToken = undefined
+      user.expireToken = undefined
+      user.save().then((savedUser) => {
+        res.json({message: "Password updated Successfully"})
+      })
+    })
+  }).catch((err) => next(err))
 })
 
 module.exports = router;
