@@ -13,6 +13,7 @@ import UpdatePost from './components/screens/UpdatePost'
 import MyFeed from './components/screens/myFeed'
 import ViewPost from './components/screens/ViewPost'
 import Reset from './components/screens/Reset'
+import Map from './components/screens/Map'
 import UpdatePassword from './components/screens/Newpassword'
 import {reducer, initialState} from './reducers/userReducer'
 
@@ -53,6 +54,9 @@ const Routing = () => {
     </Route>
     <Route path = "/myfeed">
       <MyFeed />
+    </Route>
+    <Route path = "/map">
+      <Map />
     </Route>
     <Route path = "/viewpost/:postId">
       <ViewPost />

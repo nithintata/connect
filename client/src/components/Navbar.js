@@ -38,6 +38,7 @@ const NavBar = () => {
         <li key="2"><Link to="/myfeed" onClick={() => M.Sidenav.getInstance(sideNav.current).close()}>My Feed</Link></li>,
         <li key="3"><Link to="/profile" onClick={() => M.Sidenav.getInstance(sideNav.current).close()}>Profile</Link ></li>,
         <li key="4"><Link to="/create-post" onClick={() => M.Sidenav.getInstance(sideNav.current).close()}>Create Post</Link ></li>,
+        <li key="8"><Link to="/map" onClick={() => M.Sidenav.getInstance(sideNav.current).close()}>Map</Link ></li>,
         <li key="5">
           <button className = "btn " onClick = {() => {
             localStorage.clear()

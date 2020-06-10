@@ -25,6 +25,8 @@ connect.then((db) => {
 }, (err) => {console.log(err);});
 
 var app = express();
+const Http = require("http").createServer(app);
+const io = require("socket.io")(Http);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -65,7 +67,49 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(PORT, () => {
+Http.listen(PORT, () => {
   console.log("Server running on ", PORT);
 })
+
+var users = [];
+var userIds = []
+
+io.on('connection', (socket) => {
+    socket.on('add_user', (user) => {
+        var new_user = JSON.parse(user)
+        if (userIds.includes(user._id))
+           return;
+        socket._id = new_user._id;
+        users.push(new_user);
+        userIds.push(new_user._id);
+        var new_count = users.length;
+        console.log(new_count);
+        console.log(users);
+        io.emit('user_data', users);
+    });
+
+
+    socket.on('load_init', (data) => {
+
+    });
+
+    socket.on('disconnect', () => {
+
+        for (var i = 0; i < users.length; i++)
+            if (users[i]._id === socket._id) {
+                users.splice(i, 1);
+                break;
+            }
+        for (var i = 0; i < userIds.length; i++)
+        if (userIds[i] === socket._id) {
+            userIds.splice(i, 1);
+            break;
+        }
+        var new_count = users.length;
+        console.log(new_count);
+        console.log('remove marker');
+        io.emit('user_data', users);
+    });
+});
+
 module.exports = app;
