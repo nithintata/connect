@@ -77,20 +77,21 @@ var userIds = []
 io.on('connection', (socket) => {
     socket.on('add_user', (user) => {
         var new_user = JSON.parse(user)
-        if (userIds.includes(user._id))
-           return;
-        socket._id = new_user._id;
-        users.push(new_user);
-        userIds.push(new_user._id);
-        var new_count = users.length;
-        console.log(new_count);
+        if (userIds.includes(new_user._id)) {
+           objIndex = users.findIndex((obj => obj._id == new_user._id));
+           users[objIndex].lat = new_user.lat;
+           users[objIndex].lng = new_user.lng;
+           users[objIndex].time = new_user.time;
+           console.log("Location updated")
+        }
+        else {
+          socket._id = new_user._id;
+          users.push(new_user);
+          userIds.push(new_user._id);
+        }
+        console.log(users.length);
         console.log(users);
         io.emit('user_data', users);
-    });
-
-
-    socket.on('load_init', (data) => {
-
     });
 
     socket.on('disconnect', () => {
@@ -100,11 +101,13 @@ io.on('connection', (socket) => {
                 users.splice(i, 1);
                 break;
             }
+
         for (var i = 0; i < userIds.length; i++)
-        if (userIds[i] === socket._id) {
-            userIds.splice(i, 1);
-            break;
-        }
+            if (userIds[i] === socket._id) {
+                userIds.splice(i, 1);
+                break;
+             }
+
         var new_count = users.length;
         console.log(new_count);
         console.log('remove marker');
