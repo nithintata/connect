@@ -7,7 +7,8 @@ const Profile = () => {
   const [profile, setProfile] = useState(null)
   const {state, dispatch} = useContext(UserContext)
   const{userId} = useParams()
-  const [showFollow, setShowFollow] = useState(state ? !state.following.includes(userId):true)
+  const user = JSON.parse(localStorage.getItem("user"))
+  const [showFollow, setShowFollow] = useState(!user.following.includes(userId))
   useEffect(() => {
     fetch(`/users/${userId}`, {
       headers: {
@@ -17,6 +18,27 @@ const Profile = () => {
       setProfile(result)
     })
   }, [])
+
+  function sendPush() {
+    fetch(`/notifications/subscription/${userId}`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        title: "You have a new connection",
+        image: user.pic,
+        text: user.name +" started following you. Tap to see his profile",
+        tag: "follower",
+        url: "https://connect-in.herokuapp.com/profile/" + user._id
+      })
+
+    }).then(res => res.json())
+    .then(result => {
+      console.log(result)
+    })
+  }
 
   const follow = () => {
     fetch('/users/follow', {
@@ -38,6 +60,7 @@ const Profile = () => {
         }
       })
       setShowFollow(false)
+      sendPush()
     })
   }
 

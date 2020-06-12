@@ -9,10 +9,12 @@ const PORT = process.env.PORT || 5000;
 
 const Users = require('./models/users');
 const Posts = require('./models/posts');
+const Notifications = require('./models/notifications')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var postsRouter = require('./routes/posts');
+var pushRouter = require('./routes/notifications');
 
 const url = config.mongoUrl;
 const connect = mongoose.connect(url, {
@@ -42,6 +44,7 @@ app.use(cookieParser());
 //app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
+app.use('/notifications', pushRouter);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
