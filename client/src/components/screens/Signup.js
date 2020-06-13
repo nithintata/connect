@@ -36,6 +36,12 @@ const Signup = () => {
    }
 
    const uploadFields = () => {
+     if(!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+          setIsLoading(false)
+          M.toast({html: "invalid email!",classes:"#c62828 red darken-3"})
+          return
+      }
+
      fetch("users/signup", {
        method: "post",
        headers: {

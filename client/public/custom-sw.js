@@ -9,7 +9,7 @@ self.addEventListener('push', event => {
       vibrate: [200, 100, 200],
       tag: tag,
       badge: "/favicon.ico",
-      actions: [{ action: "Detail", title: "View", icon: "https://via.placeholder.com/128/ff0000" },
+      actions: [{ action: "Detail", title: "View Profile", icon: "https://via.placeholder.com/128/ff0000" },
     {action: "Close", title: "Dismiss", icon: ""}]
     };
   event.waitUntil(
