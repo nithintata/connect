@@ -14,6 +14,7 @@ import MyFeed from './components/screens/myFeed'
 import ViewPost from './components/screens/ViewPost'
 import Reset from './components/screens/Reset'
 import Map from './components/screens/Map'
+import NotFound from './components/screens/404'
 import UpdatePassword from './components/screens/Newpassword'
 import {reducer, initialState} from './reducers/userReducer'
 
@@ -70,6 +71,7 @@ const Routing = () => {
     <Route path = "/reset/:token">
       <UpdatePassword />
     </Route>
+    <Route component={NotFound} />
     </Switch>
   )
 }

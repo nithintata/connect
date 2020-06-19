@@ -2,6 +2,7 @@ import React,{useEffect, useState, useContext, useRef} from 'react'
 import {UserContext} from '../../App'
 import {Link, useHistory} from 'react-router-dom'
 import M from 'materialize-css'
+import {subscribeUser} from '../../notifications';
 
 const Profile = () => {
   const history = useHistory()
@@ -24,6 +25,8 @@ const Profile = () => {
     .then(result => {
       setPics(result)
     }).catch(err => console.log(err))
+    if (localStorage.getItem("user"))
+      subscribeUser()
   }, [])
 
   useEffect(() => {
