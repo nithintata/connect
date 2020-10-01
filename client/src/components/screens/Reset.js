@@ -1,6 +1,6 @@
-import React, {useState, useContext} from 'react'
-import {Link, useHistory} from 'react-router-dom'
 import M from 'materialize-css'
+import React, {useContext, useState} from 'react'
+import {Link, useHistory} from 'react-router-dom'
 
 const Reset = () => {
   const history = useHistory()
