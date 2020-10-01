@@ -41,6 +41,16 @@ router.get('/:userId',authenticate.verifyUser, (req, res, next) => {
   }, (err) => next(err)).catch(err => next(err));
 })
 
+/* Get list of users you are folloing */
+router.post('/followinglist', authenticate.verifyUser, (req, res, next) => {
+  console.log(req.body._ids);
+  Users.find({_id: {$in: req.body._ids}})
+  .select("_id email name pic")
+  .then(users => {
+    res.json(users);
+  }, err => next(err)).catch((err) => next(err));
+});
+
 
 
 
