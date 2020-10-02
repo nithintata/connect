@@ -1,7 +1,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![Javascript](https://img.shields.io/badge/NodeJs-12.15.0-yellow.svg)
+
 # Connect
-A social networking web app made using MERN Stack. Here users will be able to post their memories, like, comment and follow other users and posts.
+
+A social networking web app made using MERN Stack. Here users will be able to
+post their memories, like, comment and follow other users and posts.
 
 <h3> Technologies Used </h3>
 <ul>
